@@ -13,7 +13,7 @@ classer et prédire si l’emprunteur a remboursé ou non la totalité de son pr
    catégorie.
    Une petite proportion n'a pas remboursé en totalité (classe 1) : La barre pour ceux qui n'ont pas remboursé la totalité de leur prêt est nettement plus petite.
 
-    boxplot pour la relation entre le taux d'intérêt et le statut de remboursement : 
+    Ci-dessous un boxplot pour la relation entre le taux d'intérêt et le statut de remboursement : 
 
     ![image](https://github.com/user-attachments/assets/e861df6f-b167-4eac-9973-ca16bd310216)
 
