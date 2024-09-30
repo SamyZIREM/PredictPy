@@ -7,6 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 
 #Chargement des données
@@ -65,17 +66,42 @@ print(f'Accuracy of the model: {accuracy * 100:.2f}%')
 
 # Création de l'application Flask pour exposer le modèle en API
 app = Flask(__name__)
-
+CORS(app, resources={r"/predict": {"origins": "http://127.0.0.1:5500"}})
 # Endpoint pour prédire si un emprunteur remboursera ou non son prêt
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json  # Attente des données sous forme JSON
-    df_new = pd.DataFrame([data])  # Conversion en DataFrame
-    df_new_encoded = encoder.transform(df_new)  # Encodage des variables catégorielles
-    df_new_scaled = scaler.transform(df_new_encoded)  # Normalisation des nouvelles données
+    data = request.json  # Récupération des données envoyées par le front-end
     
-    prediction = model.predict(df_new_scaled)  # Prédiction
+    # Conversion des valeurs de types string à float ou int
+    data['credit_score'] = int(data['credit_score'])
+    data['int_rate'] = float(data['int_rate']) / 100  # Assurer que le taux est sous forme décimale
+    data['loan_amount'] = int(data['loan_amount'])
+    
+    # Création d'un DataFrame à partir des données reçues
+    df_new = pd.DataFrame([data])
+    
+    # S'assurer que le DataFrame a toutes les colonnes nécessaires
+    expected_columns = loan_data_encoded.columns.drop('not.fully.paid')  # Exclure la colonne cible
+    for col in expected_columns:
+        if col not in df_new.columns:
+            df_new[col] = 0  # Valeur par défaut pour les colonnes manquantes
+
+    # Vérification de la dimension du DataFrame avant l'encodage
+    print(f'Dimensions avant encodage: {df_new.shape}')  # Ajouter un log pour le débogage
+
+    # Encodage des variables catégorielles
+    df_new_encoded = encoder.transform(df_new)  # Encoder les variables
+    print(f'Dimensions après encodage: {df_new_encoded.shape}')  # Ajouter un log pour le débogage
+    
+    # Normalisation des données
+    df_new_scaled = scaler.transform(df_new_encoded)  # Normaliser les nouvelles données
+    
+    # Prédiction
+    prediction = model.predict(df_new_scaled)  # Faire la prédiction
+    
     return jsonify({'prediction': int(prediction[0])})  # Retourner la prédiction sous forme de JSON
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
