@@ -75,7 +75,9 @@
                 if (data.error) {
                     throw new Error(data.error);
                 }
-                resultDiv.innerText = `Prédiction : ${data.prediction}`;
+                console.log('Prédicition :' + data.prediction);
+                const predictionMessage = data.prediction === 1 ? "Pas remboursé" : "Remboursé";
+                resultDiv.innerText = `Prédiction : ${predictionMessage}`;
             })
             .catch(error => {
                 console.error('Erreur :', error);
