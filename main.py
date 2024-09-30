@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from category_encoders import OrdinalEncoder
+from sklearn.model_selection import train_test_split
 
 #Chargement des données
 df = pd.read_csv('loan_data.csv')
@@ -37,3 +38,6 @@ plt.ylabel('Taux dintérêt')
 #Séparation des caractéristiques et la cible (remboursé ou non)
 X = loan_data_encoded.drop('not.fully.paid', axis=1)  # Caractéristiques
 y = loan_data_encoded['not.fully.paid']  # Cible
+
+#Division des données en set train et set test (80% entraînement et 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
