@@ -1,4 +1,4 @@
-# Données sur les prêts
+# Prédire si l’emprunteur a remboursé ou non son prêt.
 classer et prédire si l’emprunteur a remboursé ou non la totalité de son prêt.
 
 # Lancement du projet : 
