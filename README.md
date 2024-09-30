@@ -2,7 +2,7 @@
 classer et prédire si l’emprunteur a remboursé ou non la totalité de son prêt.
 
 # Lancement du projet : 
-Pour lancer le back-end, il faut se mettre dans le dossier Back "cd Back" puis faire un "python pain.py" et pour le front il suffit de se mettre dans le dossier Front "cd Front" puis le lancer directement depuis son IDE.
+Pour lancer le back-end, il faut se mettre dans le dossier Back "cd Back" puis faire un "python main.py" et pour le front il suffit de se mettre dans le dossier Front "cd Front" puis le lancer directement depuis son IDE.
 
 # Étapes de réalisation :
 1) Chragement des données
