@@ -24,7 +24,6 @@
         
             <button type="submit">Prédire</button>
         </form>
-        
 
         <div class="result" id="result"></div>
     </div>
@@ -33,13 +32,30 @@
         const form = document.getElementById('predictionForm');
         const resultDiv = document.getElementById('result');
 
+        // Dictionnaire d'encodage pour la colonne 'purpose'
+        const purposeMapping = {
+            "carte de crédit": 1,
+            "consolidation de dettes": 2,
+            "éducatif": 3,
+            "achat majeur": 4,
+            "petite entreprise": 5,
+            "tous les autres": 6
+        };
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const credit_score = document.getElementById('credit_score').value;
             const int_rate = document.getElementById('int_rate').value;
             const loan_amount = document.getElementById('loan_amount').value;
-            const purpose = document.getElementById('purpose').value;
+            const purpose = document.getElementById('purpose').value.trim(); // Nettoyer les espaces
+
+            // Vérification et conversion de 'purpose'
+            const purposeEncoded = purposeMapping[purpose];
+            if (purposeEncoded === undefined) {
+                resultDiv.innerText = 'Objet du prêt non valide. Veuillez choisir un objet valide.';
+                return; // Arrêter l'exécution si l'objet n'est pas valide
+            }
 
             // Appel à l'API Flask
             fetch('http://127.0.0.1:5000/predict', {
@@ -51,16 +67,19 @@
                     credit_score: credit_score,
                     int_rate: int_rate,
                     loan_amount: loan_amount,
-                    purpose: purpose,
+                    purpose: purposeEncoded, // Envoyer la valeur encodée
                 }),
             })
             .then(response => response.json())
             .then(data => {
-                resultDiv.innerText = `Prediction: ${data.prediction}`;
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                resultDiv.innerText = `Prédiction : ${data.prediction}`;
             })
             .catch(error => {
-                console.error('Error:', error);
-                resultDiv.innerText = 'An error occurred. Please try again.';
+                console.error('Erreur :', error);
+                resultDiv.innerText = 'Une erreur est survenue. Veuillez réessayer.';
             });
         });
     </script>
