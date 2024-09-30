@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
-
+from flask import Flask, jsonify, request
 
 
 #Chargement des données
@@ -60,3 +60,22 @@ model.fit(X_train_scaled, y_train)
 y_pred = model.predict(X_test_scaled)
 accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy of the model: {accuracy * 100:.2f}%')
+
+
+
+# Création de l'application Flask pour exposer le modèle en API
+app = Flask(__name__)
+
+# Endpoint pour prédire si un emprunteur remboursera ou non son prêt
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json  # Attente des données sous forme JSON
+    df_new = pd.DataFrame([data])  # Conversion en DataFrame
+    df_new_encoded = encoder.transform(df_new)  # Encodage des variables catégorielles
+    df_new_scaled = scaler.transform(df_new_encoded)  # Normalisation des nouvelles données
+    
+    prediction = model.predict(df_new_scaled)  # Prédiction
+    return jsonify({'prediction': int(prediction[0])})  # Retourner la prédiction sous forme de JSON
+
+if __name__ == '__main__':
+    app.run(debug=True)
