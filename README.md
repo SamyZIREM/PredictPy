@@ -28,4 +28,5 @@ classer et prédire si l’emprunteur a remboursé ou non la totalité de son pr
     Cela indique une tendance où des taux d'intérêt plus élevés pourraient être associés à un risque accru de non-remboursement.
 
 
-6) 
+6) Ajout du modèle de régression logistique (précision à 83.82%)
+7) Ajout de l'appli falsk 
