@@ -38,7 +38,7 @@ Pour lancer le back-end, il faut se mettre dans le dossier Back "cd Back" puis f
 
 
 6) Ajout du modèle de régression logistique (précision à 83.82%)
-7) Ajout de l'appli falsk
+7) Ajout de l'appli flask
 8) Ajout de l'appli front pour appeler l'api réalisée côté Back
 9) Vue de l'application :
 ![image](https://github.com/user-attachments/assets/b1906abb-cecd-45d3-9001-de0381b7fb2f)
